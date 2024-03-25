@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:28:27 by chon              #+#    #+#             */
-/*   Updated: 2024/03/21 17:11:55 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/25 16:26:29 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,6 @@ void	increment(pt_dets p1, pt_dets p2, int *x, int *y);
 void	free_array(char **array);
 void	free_db_array(double **array, int x);
 double	factor_calc(double x, double y);
+int		free_and_return(char **str, int num);
 
 #endif

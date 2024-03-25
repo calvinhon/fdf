@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:17:42 by chon              #+#    #+#             */
-/*   Updated: 2024/03/21 14:35:47 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/25 16:41:28 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,12 @@ int	is_hex(char *str)
 	i = 2;
 	if (ft_strlen(str) > 10 || ft_strlen(str) < 3)
 		return (0);
-	if (ft_strlen(str) > 2 && !(str[0] == '0'
-			&& (str[1] == 'x' || str[1] == 'X')))
+	if (!(str[0] == '0'	&& (str[1] == 'x' || str[1] == 'X')))
 		return (0);
-	if (ft_strlen(str) > 2)
-	{
-		while (str[i])
-		{
-			if (!(ft_isdigit(str[i]) || (str[i] >= 'a' && str[i] <= 'f')
-					|| (str[i] >= 'A' && str[i] <= 'F')))
-				return (0);
-			i++;
-		}
-	}
-	return (1);
-}
-
-int	is_decimal(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (i == 0 && str[i] == '-')
-		i++;
 	while (str[i])
 	{
-		if (!(ft_isdigit(str[i])))
+		if (!(ft_isdigit(str[i]) || (str[i] >= 'a' && str[i] <= 'f')
+				|| (str[i] >= 'A' && str[i] <= 'F')))
 			return (0);
 		i++;
 	}
@@ -73,54 +53,68 @@ int	check_color(char **elmnts)
 	return (1);
 }
 
-int	check_elmnts(char **array)
+int	is_decimal(char *str)
 {
-	int		i;
-	int		j;
-	char	**elmnts;
+	int	i;
 
 	i = 0;
-	j = 0;
-	while (array[i])
-	{
-		elmnts = ft_split(array[i], ' ');
-		while (elmnts[j])
-		{
-			if (!ft_strchr(elmnts[j], ',') && !is_decimal(elmnts[j]))
-				return (0);
-			else if (check_color(ft_split(elmnts[j], ',')) == 0)
-				return (0);
-			j++;
-		}
-		j = 0;
+	if (i == 0 && str[i] == '-')
 		i++;
+	while (str[i])
+	{
+		if (!(ft_isdigit(str[i])))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	check_elmnts(char **array)
+{
+	ct_vars	a;
+	char	**elmnts;
+	char	**color;
+
+	a.i = -1;
+	a.j = -1;
+	while (array[++a.i])
+	{
+		elmnts = ft_split(array[a.i], ' ');
+		while (elmnts[++a.j])
+		{
+			if (!ft_strchr(elmnts[a.j], ',') && !is_decimal(elmnts[a.j]))
+				return (free_and_return(elmnts, 0));
+			if (ft_strchr(elmnts[a.j], ','))
+			{
+				color = ft_split(elmnts[a.j], ',');
+				if (check_color(color) == 0)
+					return (free_and_return(color, 0));
+				free_array(color);
+			}
+		}
+		free_array(elmnts);
+		a.j = -1;
 	}
 	return (1);
 }
 
 int	check_map(char **array)
 {
-	int		i;
-	int		cur_row_elmnts_ct;
-	int		next_row_elmnts_ct;
-	char	**row_elmnts;
+	ct_vars	a;
+	int		point_ct;
 
-	cur_row_elmnts_ct = 0;
-	next_row_elmnts_ct = 0;
-	i = 0;
-	while (array[i + 1])
+	a.i = 0;
+	a.j = 0;
+	point_ct = 0;
+	while (array[a.i][point_ct] != ' ')
+		point_ct++;
+	while (array[++a.i])
 	{
-		row_elmnts = ft_split(array[i], ' ');
-		while (row_elmnts[cur_row_elmnts_ct])
-			cur_row_elmnts_ct++;
-		i++;
-		row_elmnts = ft_split(array[i], ' ');
-		while (row_elmnts[next_row_elmnts_ct])
-			next_row_elmnts_ct++;
-		if (cur_row_elmnts_ct != next_row_elmnts_ct)
+		while (array[a.i][a.j] != ' ')
+			a.j++;
+		if (a.j != point_ct)
 			return (0);
-		cur_row_elmnts_ct = 0;
-		next_row_elmnts_ct = 0;
+		a.j = 0;
 	}
 	return (check_elmnts(array));
 }

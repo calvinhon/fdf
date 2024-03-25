@@ -6,11 +6,17 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:10:43 by chon              #+#    #+#             */
-/*   Updated: 2024/03/21 17:34:23 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/25 16:27:23 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
+
+int	free_and_return(char **str, int num)
+{
+	free_array(str);
+	return (num);
+}
 
 double	factor_calc(double x, double y)
 {

@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:28:27 by chon              #+#    #+#             */
-/*   Updated: 2024/03/21 17:13:46 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/25 16:26:24 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ typedef struct s_sizing
 	double	max_x;
 	double	max_y;
 	double	t;
-	double	factor;
 }	sizing;
 
 typedef struct s_point
@@ -92,5 +91,6 @@ void	increment(pt_dets p1, pt_dets p2, int *x, int *y);
 void	free_array(char **array);
 void	free_db_array(double **array, int x);
 double	factor_calc(double x, double y);
+int		free_and_return(char **str, int num);
 
 #endif

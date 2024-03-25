@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_grid_utils1.c                               :+:      :+:    :+:   */
+/*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:59:49 by chon              #+#    #+#             */
-/*   Updated: 2024/03/21 16:02:57 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/25 17:01:23 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void	stretch_transl(pt_dets **map, double factor, double t_x, double t_y)
 	{
 		while (map[idx.i][idx.j].end)
 		{
-			map[idx.i][idx.j].x = (map[idx.i][idx.j].x + t_x) * factor;
-			map[idx.i][idx.j].y = (map[idx.i][idx.j].y + t_y) * factor;
+			map[idx.i][idx.j].x = map[idx.i][idx.j].x * factor + t_x;
+			map[idx.i][idx.j].y = map[idx.i][idx.j].y * factor + t_y;
 			idx.j++;
 		}
 		idx.j = 0;
@@ -99,19 +99,19 @@ double	**mult_matrix(int x, int y, double **matrix1, double **matrix2)
 
 double	**init_matrix(int x, int y)
 {
-	double	**iso;
+	double	**matrix;
 	int		i;
 
-	iso = ft_calloc(x, sizeof(double));
-	if (!iso)
+	matrix = ft_calloc(x, sizeof(double));
+	if (!matrix)
 		return (NULL);
 	i = 0;
 	while (i < x)
 	{
-		iso[i] = ft_calloc(y, sizeof(double));
-		if (!iso[i])
+		matrix[i] = ft_calloc(y, sizeof(double));
+		if (!matrix[i])
 			return (NULL);
 		i++;
 	}
-	return (iso);
+	return (matrix);
 }

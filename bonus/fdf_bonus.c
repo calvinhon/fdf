@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:41:49 by chon              #+#    #+#             */
-/*   Updated: 2024/03/21 18:35:56 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/25 16:49:00 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ void	setup_img(mlx_vars *vars, char **array)
 	vars->win = mlx_new_window(vars->mlx, 1920, 1080, "fdf");
 	img.img = mlx_new_image(vars->mlx, 1920, 1080);
 	clean_map = collect_data_points(array);
+	if (!clean_map)
+	{
+		free_array(array);
+		exit(0);
+	}
 	set_controls(vars);
 	create_grid(vars, img, clean_map);
 	mlx_put_image_to_window(vars->mlx, vars->win, img.img, 0, 0);
@@ -40,14 +45,15 @@ char	*pull_elements(char *map)
 	elements = NULL;
 	map = ft_strjoin(ft_strdup("./test_maps/"), map);
 	fd = open(map, O_RDONLY);
-	line = "line";
+	line = get_next_line(fd);
 	while (line)
 	{
-		line = get_next_line(fd);
 		elements = ft_strjoin(elements, line);
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
+	free(map);
 	return (elements);
 }
 
@@ -65,14 +71,14 @@ int	main(int ac, char **av)
 		if (!array || check_map(array) == 0)
 		{
 			ft_putstr_fd("Invalid map\n", 1);
-			free_array(array);
+			free(array);
 			return (1);
 		}
 		vars->mlx = mlx_init();
 		if (!vars->mlx)
 		{
-			//free array
-			//free vars
+			free_array(array);
+			free(vars);
 			return (1);
 		}
 		setup_img(vars, array);

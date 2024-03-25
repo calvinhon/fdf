@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:51:24 by chon              #+#    #+#             */
-/*   Updated: 2024/03/21 17:12:48 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/25 16:56:03 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ void	plot(t_data *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x > 1920 || y > 1080 || x < 0 || y < 0)
+	if (x > 1919 || y > 1079 || x < 0 || y < 0)
 		return ;
-	dst = data->addr + (y * data->l_len + x * (data->bpp / 8));
+	dst = data->addr + y * data->l_len + x * (data->bpp / 8);
 	*(unsigned int *)dst = color;
 }
 
@@ -56,26 +56,26 @@ void	adjust_grid(pt_dets **map)
 	sizing		s;
 
 	a.i = -1;
-	a.j = 0;
+	a.j = -1;
 	s.min_x = map[0][0].x;
 	s.max_x = map[0][0].x;
 	s.min_y = map[0][0].y;
 	s.max_y = map[0][0].y;
 	while (map[++a.i])
 	{
-		while (map[a.i][a.j].end)
+		while (map[a.i][++a.j].end)
 		{
 			s.min_x = min(2, map[a.i][a.j].x, s.min_x);
 			s.max_x = max(2, map[a.i][a.j].x, s.max_x);
 			s.min_y = min(2, map[a.i][a.j].y, s.min_y);
-			s.max_y = max(2, map[a.i][a.j++].y, s.max_y);
+			s.max_y = max(2, map[a.i][a.j].y, s.max_y);
 		}
-		a.j = 0;
+		a.j = -1;
 	}
 	s.max_x -= min(2, 0, s.min_x);
 	s.max_y -= min(2, 0, s.min_y);
-	s.factor = factor_calc(s.max_x, s.max_y);
-	stretch_transl(map, s.factor, max(2, -s.min_x, 0), max(2, -s.min_y, 0));
+	stretch_transl(map, 1, max(2, -s.min_x, 0), max(2, -s.min_y, 0));
+	stretch_transl(map, factor_calc(s.max_x, s.max_y), 0, 0);
 }
 
 void	rotate_map(double **r_matrix, pt_dets **map)
@@ -114,7 +114,6 @@ void	create_grid(t_data img, pt_dets **map)
 	a.j = -1;
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.l_len, &img.endian);
 	rotate_map(z_r(init_matrix(3, 3), M_PI / 4), map);
-	adjust_grid(map);
 	rotate_map(x_r(init_matrix(3, 3), atan(sqrt(2))), map);
 	adjust_grid(map);
 	stretch_transl(map, 1, 50, 50);

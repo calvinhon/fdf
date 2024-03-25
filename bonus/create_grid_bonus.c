@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:51:24 by chon              #+#    #+#             */
-/*   Updated: 2024/03/21 17:47:45 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/25 16:56:26 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	plot(t_data *data, int x, int y, int color)
 	char	*dst;
 
 	// printf("%d,%d\n", x, y);
-	if (x > 1920 || y > 1080 || x < 0 || y < 0)
+	if (x > 1919 || y > 1079 || x < 0 || y < 0)
 		return ;
-	dst = data->addr + (y * data->l_len + x * (data->bpp / 8));
+	dst = data->addr + y * data->l_len + x * (data->bpp / 8);
 	*(unsigned int *)dst = color;
 }
 
@@ -75,11 +75,8 @@ void	adjust_grid(pt_dets **map)
 	}
 	s.max_x -= min(2, 0, s.min_x);
 	s.max_y -= min(2, 0, s.min_y);
-	printf("max %.0f,%.0f\n", s.max_x, s.max_y);
-	printf("min %.0f,%.0f\n", s.min_x, s.min_y);
-	// printf("trans1: %.0f,%.0f\n", max(2, -1 * s.min_x, 0), max(2, -1 * s.min_y, 0));
-	s.factor = factor_calc(s.max_x, s.max_y);
-	stretch_transl(map, s.factor, max(2, -1 * s.min_x, 0), max(2, -1 * s.min_y, 0));
+	stretch_transl(map, 1, max(2, -s.min_x, 0), max(2, -s.min_y, 0));
+	stretch_transl(map, factor_calc(s.max_x, s.max_y), 0, 0);
 }
 
 void	rotate_map(double **r_matrix, pt_dets **map)
@@ -117,13 +114,12 @@ void	create_grid(mlx_vars *vars, t_data img, pt_dets **map)
 	a.i = -1;
 	a.j = -1;
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.l_len, &img.endian);
-	// rotate_map(z_r(init_matrix(3, 3), M_PI / 4), map);
+	rotate_map(z_r(init_matrix(3, 3), M_PI / 4), map);
+	rotate_map(x_r(init_matrix(3, 3), atan(sqrt(2))), map);
 	adjust_grid(map);
-	// rotate_map(x_r(init_matrix(3, 3), atan(sqrt(2))), map);
-	// adjust_grid(map);
 	vars->adj->x_offset = 0;
 	// printf("%d\n", vars->adj->x_offset);
-	// stretch_transl(map, 1, 50 + vars->adj->x_offset, 50);
+	stretch_transl(map, 1, 100 + vars->adj->x_offset, 50);
 	while (map[++a.i])
 	{
 		while (map[a.i][++a.j + 1].end)

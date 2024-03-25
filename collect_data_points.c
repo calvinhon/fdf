@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:06:11 by chon              #+#    #+#             */
-/*   Updated: 2024/03/18 15:59:34 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/25 16:51:44 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	point_color(char *str, pt_dets *point)
 	hex = ft_split(str, ',');
 	point->z = (double)ft_atoi(hex[0]);
 	point->color = atoi_hex(hex[1]);
+	free_array(hex);
 }
 
 pt_dets	*fill_data_points(char	**str, int row, int columns)
@@ -95,25 +96,25 @@ int	ct_non_spaces(char *str)
 
 pt_dets	**collect_data_points(char **array)
 {
-	ct_vars	vars;
+	ct_vars	a;
 	char	**elmnts;
 	pt_dets	**data_points;
 
-	vars.i = 0;
-	vars.j = 0;
-	vars.k = ct_non_spaces(array[0]);
-	while (array[vars.j])
-		vars.j++;
-	data_points = malloc(sizeof(pt_dets) * (vars.j + 1));
+	a.i = 0;
+	a.j = 0;
+	a.k = ct_non_spaces(array[0]);
+	while (array[a.j])
+		a.j++;
+	data_points = malloc(sizeof(pt_dets) * (a.j + 1));
 	if (!data_points)
 		return (NULL);
-	vars.i = -1;
-	while (++vars.i < vars.j)
+	a.i = -1;
+	while (++a.i < a.j)
 	{
-		elmnts = ft_split(array[vars.i], ' ');
-		data_points[vars.i] = fill_data_points(elmnts, vars.i, vars.k);
+		elmnts = ft_split(array[a.i], ' ');
+		data_points[a.i] = fill_data_points(elmnts, a.i, a.k);
 		free_array(elmnts);
 	}
-	data_points[vars.i] = NULL;
+	data_points[a.i] = NULL;
 	return (data_points);
 }
