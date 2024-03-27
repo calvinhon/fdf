@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:28:27 by chon              #+#    #+#             */
-/*   Updated: 2024/03/25 16:26:24 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/27 14:42:56 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,15 @@ typedef struct s_transform
 	int	y_offset;
 }	transform;
 
-typedef struct s_data
-{
-	void	*img;
-	char	*addr;
-	int		bpp;
-	int		l_len;
-	int		endian;
-}	t_data;
-
 typedef	struct s_mlx_vars
 {
 	void		*mlx;
 	void		*win;
+	void		*img;
+	char		*addr;
+	int			bpp;
+	int			l_len;
+	int			end;
 	transform	*adj;
 }	mlx_vars;
 
@@ -45,6 +41,7 @@ typedef struct s_ct_vars
 	int	i;
 	int	j;
 	int	k;
+	int	point_ct1;
 }	ct_vars;
 
 typedef struct s_line
@@ -77,7 +74,7 @@ typedef struct s_point
 
 int		check_map(char **array);
 pt_dets	**collect_data_points(char **array);
-void	create_grid(mlx_vars *vars, t_data img, pt_dets **map);
+void	create_grid(mlx_vars *env, pt_dets **map);
 double 	**mult_matrix(int x, int y, double **matrix1, double **matrix2);
 double 	**init_matrix(int x, int y);
 double 	min(int n, ...);
@@ -85,8 +82,8 @@ double 	max(int n, ...);
 double 	**x_r(double **matrix, double x);
 double 	**z_r(double **matrix, double x);
 void 	stretch_transl(pt_dets **map, double factor, double t_x, double t_y);
-void	set_controls(mlx_vars *vars);
-void	fdf_legend(mlx_vars *vars);
+void	set_controls(mlx_vars *env);
+void	fdf_legend(mlx_vars *env);
 void	increment(pt_dets p1, pt_dets p2, int *x, int *y);
 void	free_array(char **array);
 void	free_db_array(double **array, int x);

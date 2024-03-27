@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:41:49 by chon              #+#    #+#             */
-/*   Updated: 2024/03/25 16:48:42 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/27 13:47:31 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ void	setup_img(mlx_vars vars, char **array)
 	set_controls(vars);
 }
 
-char	*pull_elements(char *map)
+char	*pull_elements(char *str)
 {
 	int		fd;
 	char	*elements;
 	char	*line;
 
 	elements = NULL;
-	map = ft_strjoin(ft_strdup("./test_maps/"), map);
-	fd = open(map, O_RDONLY);
+	str = ft_strjoin(ft_strdup("./test_maps/"), str);
+	fd = open(str, O_RDONLY);
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -52,18 +52,21 @@ char	*pull_elements(char *map)
 		line = get_next_line(fd);
 	}
 	close(fd);
-	free(map);
+	free(str);
 	return (elements);
 }
 
 int	main(int ac, char **av)
 {
+	char		*elements;
 	char		**array;
 	mlx_vars	vars;
 
 	if (ac == 2)
 	{
-		array = ft_split(pull_elements(av[1]), '\n');
+		elements = pull_elements(av[1]);
+		array = ft_split(elements, '\n');
+		free(elements);
 		if (!array || check_map(array) == 0)
 		{
 			ft_putstr_fd("Invalid map\n", 1);

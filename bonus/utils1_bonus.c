@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:59:49 by chon              #+#    #+#             */
-/*   Updated: 2024/03/25 16:55:01 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/27 10:42:42 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ void	stretch_transl(pt_dets **map, double factor, double t_x, double t_y)
 
 double	**mult_matrix(int x, int y, double **matrix1, double **matrix2)
 {
-	double	**matrix_r;
+	double	**new_matrix;
 	ct_vars	idx;
 	double	num;
 
-	matrix_r = init_matrix(x, y);
+	new_matrix = init_matrix(x, y);
 	idx.i = 0;
 	idx.j = 0;
 	idx.k = -1;
@@ -86,7 +86,7 @@ double	**mult_matrix(int x, int y, double **matrix1, double **matrix2)
 		{
 			while (++idx.k < x)
 				num += matrix1[idx.i][idx.k] * matrix2[idx.k][idx.j];
-			matrix_r[idx.i][idx.j] = num;
+			new_matrix[idx.i][idx.j] = num;
 			num = 0;
 			idx.k = -1;
 			idx.j++;
@@ -94,7 +94,8 @@ double	**mult_matrix(int x, int y, double **matrix1, double **matrix2)
 		idx.j = 0;
 		idx.i++;
 	}
-	return (matrix_r);
+	free(matrix2);
+	return (new_matrix);
 }
 
 double	**init_matrix(int x, int y)

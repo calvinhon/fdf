@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:28:27 by chon              #+#    #+#             */
-/*   Updated: 2024/03/25 16:26:29 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/27 13:26:31 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_ct_vars
 	int	i;
 	int	j;
 	int	k;
+	int	point_ct1;
 }	ct_vars;
 
 typedef struct s_line
@@ -80,7 +81,6 @@ double 	**x_r(double **matrix, double x);
 double 	**z_r(double **matrix, double x);
 void 	stretch_transl(pt_dets **map, double factor, double t_x, double t_y);
 void	set_controls(mlx_vars vars);
-void	fdf_legend(mlx_vars *vars);
 void	increment(pt_dets p1, pt_dets p2, int *x, int *y);
 void	free_array(char **array);
 void	free_db_array(double **array, int x);

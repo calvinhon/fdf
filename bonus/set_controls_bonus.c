@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:41:45 by chon              #+#    #+#             */
-/*   Updated: 2024/03/21 15:36:53 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/27 14:25:14 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@ void	fdf_legend(mlx_vars *vars)
 	mlx_string_put(mlx, win, 30, 50, TEXT_COLOR, "Arrow Keys: Translate");
 }
 
-int	x_close(mlx_vars *vars)
+int	x_close(mlx_vars *env)
 {
-	(void)vars;
+	// (void)vars;
+	mlx_destroy_image(env->mlx, env->img);
+	mlx_destroy_window(env->mlx, env->win);
 	exit(0);
 	return (0);
 }
@@ -43,18 +45,12 @@ int	key(int key, mlx_vars *vars)
 		vars->adj->y_offset -= 50;
 	else if (key == 125)
 		vars->adj->y_offset += 50;
+	// printf("x_offset: %d\n", vars->adj->x_offset);
 	return (0);
 }
 
-void	set_controls(mlx_vars *vars)
+void	set_controls(mlx_vars *env)
 {
-	transform	adj;
-	
-	vars->adj = malloc(sizeof(transform));
-	if (!vars->adj)
-		return ;
-	adj.x_offset = 0;
-	adj.y_offset = 0;
-	mlx_hook(vars->win, 2, 0, key, vars);
-	mlx_hook(vars->win, 17, 0, x_close, vars);
+	mlx_hook(env->win, 2, 0, key, env);
+	mlx_hook(env->win, 17, 0, x_close, env);
 }

@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:17:42 by chon              #+#    #+#             */
-/*   Updated: 2024/03/25 16:41:28 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/27 13:30:11 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,19 +101,27 @@ int	check_elmnts(char **array)
 int	check_map(char **array)
 {
 	ct_vars	a;
-	int		point_ct;
+	int		point_ct2;
 
-	a.i = 0;
+	a.i = -1;
 	a.j = 0;
-	point_ct = 0;
-	while (array[a.i][point_ct] != ' ')
-		point_ct++;
+	point_ct2 = 0;
 	while (array[++a.i])
 	{
-		while (array[a.i][a.j] != ' ')
-			a.j++;
-		if (a.j != point_ct)
+		while (array[a.i][a.j])
+		{
+			while (array[a.i][a.j] == ' ')
+				a.j++;
+			if (array[a.i][a.j])
+				point_ct2++;
+			if (a.i == 0)
+				a.point_ct1 = point_ct2;
+			while (array[a.i][a.j] && array[a.i][a.j] != ' ')
+				a.j++;
+		}
+		if (a.point_ct1 != point_ct2)
 			return (0);
+		point_ct2 = 0;
 		a.j = 0;
 	}
 	return (check_elmnts(array));
