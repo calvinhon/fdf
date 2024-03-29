@@ -6,49 +6,50 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:41:49 by chon              #+#    #+#             */
-/*   Updated: 2024/03/27 15:07:31 by chon             ###   ########.fr       */
+/*   Updated: 2024/03/29 17:13:53 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
 
+void	init_rotation(mlx_vars *env)
+{
+	rotate_map(z_r(init_matrix(3, 3), M_PI / 4), env->map);
+	rotate_map(x_r(init_matrix(3, 3), atan(sqrt(2))), env->map);
+	adjust_grid(env->map);
+	stretch_transl(env->map, 1, 50, 50);
+}
+
 void	setup_img(mlx_vars *env, char **array)
 {
-	pt_dets		**clean_map;
 	int			i;
 
+	env->adj = (transform *)malloc(sizeof(transform));
+	if (!env->adj)
+		return ;
+	env->adj->x_offset = 0;
+	env->adj->y_offset = 0;
+	env->adj->zoom_factor = 0;
 	i = -1;
-	clean_map = collect_data_points(array);
-	if (!clean_map)
+	env->map = collect_data_points(array);
+	if (!env->map)
 	{
 		free_array(array);
 		exit(0);
 	}
+	init_rotation(env);
 	set_controls(env);
-	create_grid(env, clean_map);
-	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
-	fdf_legend(env);
-	while (clean_map[++i])
-		free (clean_map[i]);
-	free (clean_map);
-}
-
-transform	*init_transform(void)
-{
-	transform	*adj;
-
-	adj = (transform *)malloc(sizeof(transform));
-	if (!adj)
-		return (NULL);
-	adj->x_offset = 0;
-	adj->y_offset = 0;
-	return (adj);
+	create_grid(env, env->map);
+	mlx_loop(env->mlx);
+	while (env->map[++i])
+		free (env->map[i]);
+	free (env->map);
 }
 
 mlx_vars	*init_env(void)
 {
 	mlx_vars	*env;
-	
+
 	env = (mlx_vars *)malloc(sizeof(mlx_vars));
 	if (!env)
 		return (NULL);
@@ -57,7 +58,7 @@ mlx_vars	*init_env(void)
 	{
 		free(env);
 		return (NULL);
-	}	
+	}
 	env->win = mlx_new_window(env->mlx, 1920, 1080, "fdf");
 	env->img = mlx_new_image(env->mlx, 1920, 1080);
 	env->addr = mlx_get_data_addr(env->img, &env->bpp, &env->l_len, &env->end);
@@ -65,8 +66,8 @@ mlx_vars	*init_env(void)
 	{
 		free(env);
 		return (NULL);
-	}	
-	env->adj = init_transform();
+	}
+	// env->adj = init_transform();
 	return (env);
 }
 
@@ -115,8 +116,6 @@ int	main(int ac, char **av)
 			return (1);
 		}
 		setup_img(env, array);
-		mlx_loop(env->mlx);
-		free(env);
 	}
 	return (0);
 }

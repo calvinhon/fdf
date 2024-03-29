@@ -6,7 +6,7 @@
 #    By: chon <chon@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 12:58:35 by chon              #+#    #+#              #
-#    Updated: 2024/03/27 12:43:23 by chon             ###   ########.fr        #
+#    Updated: 2024/03/29 16:19:32 by chon             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ OBJS_B = $(BONUS:.c=.o)
 BONUS = ./bonus/fdf_bonus.c ./bonus/check_map_bonus.c \
 ./bonus/collect_data_points_bonus.c ./bonus/create_grid_bonus.c \
 ./bonus/utils1_bonus.c ./bonus/utils2_bonus.c ./bonus/utils3_bonus.c \
-./bonus/set_controls_bonus.c 
+./bonus/set_controls_bonus.c ./bonus/set_controls2_bonus.c ./bonus/color_bonus.c
 
 $(NAME): $(OBJS)
 	make -C $(LIBFT_DIR) 
