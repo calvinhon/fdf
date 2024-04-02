@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:41:49 by chon              #+#    #+#             */
-/*   Updated: 2024/03/29 17:13:53 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/02 16:46:54 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,10 @@ void	setup_img(mlx_vars *env, char **array)
 {
 	int			i;
 
-	env->adj = (transform *)malloc(sizeof(transform));
-	if (!env->adj)
-		return ;
-	env->adj->x_offset = 0;
-	env->adj->y_offset = 0;
-	env->adj->zoom_factor = 0;
+	// env->adj = (transform *)malloc(sizeof(transform));
+	// if (!env->adj)
+	// 	return ;
+	reset_transformation(env);
 	i = -1;
 	env->map = collect_data_points(array);
 	if (!env->map)

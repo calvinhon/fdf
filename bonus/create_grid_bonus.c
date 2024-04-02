@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:51:24 by chon              #+#    #+#             */
-/*   Updated: 2024/03/29 16:57:37 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/02 17:32:01 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	pixels(mlx_vars *env, pt_dets p1, pt_dets p2)
 	b.dy = roundf(fabs(p2.y - p1.y));
 	increment(p1, p2, &b.xi, &b.yi);
 	b.err = b.dx - b.dy;
-	while (roundf(fabs(p1.x - p2.x)) > 0 || roundf(fabs(p1.y - p2.y)) > 1)
+	while (roundf(fabs(p1.x - p2.x)) > 0 || roundf(fabs(p1.y - p2.y)) > 0)
 	{
 		plot(env, p1.x, p1.y, calc_color(1 - fabs((p1.y - p2.y) / b.dy),
 				p1.color, p2.color));
@@ -98,7 +98,7 @@ void	rotate_map(double **r_matrix, pt_dets **map)
 			map_matrix = mult_matrix(3, 1, r_matrix, map_matrix);
 			map[a.i][a.j].x = map_matrix[0][0];
 			map[a.i][a.j].y = map_matrix[1][0];
-			map[a.i][a.j].z = map_matrix[2][0] * .5;
+			map[a.i][a.j].z = map_matrix[2][0] * 1;
 			a.j++;
 		}
 		a.j = 0;
@@ -108,6 +108,7 @@ void	rotate_map(double **r_matrix, pt_dets **map)
 	free_db_array(r_matrix, 3);
 }
 
+
 void	create_grid(mlx_vars *env, pt_dets **map)
 {
 	ct_vars	a;
@@ -115,9 +116,10 @@ void	create_grid(mlx_vars *env, pt_dets **map)
 	a.i = -1;
 	a.j = -1;
 	ft_bzero(env->addr, 1920 * 1080 * (env->bpp / 8));
-	printf("%f\n", env->adj->zoom_factor);
-	stretch_transl(map, 1 + env->adj->zoom_factor, 
-		env->adj->x_offset, env->adj->y_offset);
+	stretch_transl(map, env->adj.zoom_factor, 
+		env->adj.x_offset, env->adj.y_offset);
+	rotate_map(z_r(init_matrix(3, 3), M_PI / 4 * env->adj.rotate_z), env->map);
+	rotate_map(x_r(init_matrix(3, 3), env->adj.rotate_x), env->map);
 	while (map[++a.i])
 	{
 		while (map[a.i][++a.j + 1].end)
@@ -132,4 +134,5 @@ void	create_grid(mlx_vars *env, pt_dets **map)
 	}
 	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
 	fdf_legend(env);
+	reset_transformation(env);
 }

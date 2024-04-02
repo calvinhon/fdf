@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:28:27 by chon              #+#    #+#             */
-/*   Updated: 2024/04/02 16:18:50 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/02 16:58:52 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ typedef struct s_transform
 	int		x_offset;
 	int		y_offset;
 	double	zoom_factor;
+	double	rotate_z;
+	double	rotate_x;
+	int		projection;
 }	transform;
 
 typedef struct s_ct_vars
@@ -91,7 +94,7 @@ typedef	struct s_mlx_vars
 	int			l_len;
 	int			end;
 	pt_dets		**map;
-	transform	*adj;
+	transform	adj;
 }	mlx_vars;
 
 int		check_map(char **array);
@@ -119,5 +122,6 @@ double	factor_calc(double x, double y);
 int		free_and_return(char **str, int num);
 void	get_color(pt_dets **map);
 int		calc_color(double fraction, double color1, double color2);
+void	reset_transformation(mlx_vars *env);
 
 #endif
