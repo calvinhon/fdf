@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 16:19:04 by chon              #+#    #+#             */
-/*   Updated: 2024/03/29 17:28:57 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/02 16:15:58 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ void	fdf_legend(mlx_vars *env)
 	mlx_string_put(mlx, win, 30, 110, WHITE, "Space: Toggle Projection");
 }
 
-int	mouse(int key, mlx_vars *env)
+int	mouse(int key, int x, int y, mlx_vars *env)
 {
 	printf("%d\n", key);
+	(void)x;
+	(void)y;
 	printf("zoom2:%f\n", env->adj->zoom_factor);
 	// if (key == 5)
 	// {

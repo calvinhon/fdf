@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:28:27 by chon              #+#    #+#             */
-/*   Updated: 2024/03/29 16:36:01 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/02 16:18:50 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ double 	**z_r(double **matrix, double x);
 void 	stretch_transl(pt_dets **map, double factor, double t_x, double t_y);
 void	set_controls(mlx_vars *env);
 void	translation(int key, mlx_vars *env);
-int		mouse(int key, mlx_vars *env);
+int		mouse(int key, int x, int y, mlx_vars *env);
 void	zoom(int key, mlx_vars *env);
 void	rotate(int key, mlx_vars *env);
 void	fdf_legend(mlx_vars *env);
