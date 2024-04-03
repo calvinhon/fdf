@@ -6,17 +6,17 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:59:49 by chon              #+#    #+#             */
-/*   Updated: 2024/03/27 10:42:24 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/03 16:52:56 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-double	max(int n, ...)
+double max(int n, ...)
 {
-	va_list	args;
-	double	max_num;
-	double	cur;
+	va_list args;
+	double max_num;
+	double cur;
 
 	va_start(args, n);
 	max_num = va_arg(args, double);
@@ -31,11 +31,11 @@ double	max(int n, ...)
 	return (max_num);
 }
 
-double	min(int n, ...)
+double min(int n, ...)
 {
-	va_list	args;
-	double	min_num;
-	double	cur;
+	va_list args;
+	double min_num;
+	double cur;
 
 	va_start(args, n);
 	min_num = va_arg(args, double);
@@ -50,9 +50,9 @@ double	min(int n, ...)
 	return (min_num);
 }
 
-void	stretch_transl(pt_dets **map, double factor, double t_x, double t_y)
+void stretch_transl(t_pt_dets **map, double factor, double t_x, double t_y)
 {
-	ct_vars	idx;
+	ct_vars idx;
 
 	idx.i = 0;
 	idx.j = 0;
@@ -69,11 +69,11 @@ void	stretch_transl(pt_dets **map, double factor, double t_x, double t_y)
 	}
 }
 
-double	**mult_matrix(int x, int y, double **matrix1, double **matrix2)
+double **mult_matrix(int x, int y, double **matrix1, double **matrix2)
 {
-	double	**new_matrix;
-	ct_vars	idx;
-	double	num;
+	double **new_matrix;
+	ct_vars idx;
+	double num;
 
 	new_matrix = init_matrix(x, y);
 	idx.i = 0;
@@ -98,10 +98,10 @@ double	**mult_matrix(int x, int y, double **matrix1, double **matrix2)
 	return (new_matrix);
 }
 
-double	**init_matrix(int x, int y)
+double **init_matrix(int x, int y)
 {
-	double	**matrix;
-	int		i;
+	double **matrix;
+	int i;
 
 	matrix = ft_calloc(x, sizeof(double));
 	if (!matrix)

@@ -6,17 +6,17 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:41:49 by chon              #+#    #+#             */
-/*   Updated: 2024/03/27 13:47:31 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/03 16:52:56 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	setup_img(mlx_vars vars, char **array)
+void setup_img(t_mlx_vars vars, char **array)
 {
-	t_data		img;
-	pt_dets		**clean_map;
-	int			i;
+	t_data img;
+	t_pt_dets **clean_map;
+	int i;
 
 	i = -1;
 	vars.win = mlx_new_window(vars.mlx, 1920, 1080, "fdf");
@@ -29,17 +29,17 @@ void	setup_img(mlx_vars vars, char **array)
 	}
 	create_grid(img, clean_map);
 	while (clean_map[++i])
-		free (clean_map[i]);
-	free (clean_map);
+		free(clean_map[i]);
+	free(clean_map);
 	mlx_put_image_to_window(vars.mlx, vars.win, img.img, 0, 0);
 	set_controls(vars);
 }
 
-char	*pull_elements(char *str)
+char *pull_elements(char *str)
 {
-	int		fd;
-	char	*elements;
-	char	*line;
+	int fd;
+	char *elements;
+	char *line;
 
 	elements = NULL;
 	str = ft_strjoin(ft_strdup("./test_maps/"), str);
@@ -56,11 +56,11 @@ char	*pull_elements(char *str)
 	return (elements);
 }
 
-int	main(int ac, char **av)
+int main(int ac, char **av)
 {
-	char		*elements;
-	char		**array;
-	mlx_vars	vars;
+	char *elements;
+	char **array;
+	t_mlx_vars vars;
 
 	if (ac == 2)
 	{

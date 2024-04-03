@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:59:49 by chon              #+#    #+#             */
-/*   Updated: 2024/03/29 15:05:56 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/03 17:12:35 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ double	min(int n, ...)
 	return (min_num);
 }
 
-void	stretch_transl(pt_dets **map, double factor, double t_x, double t_y)
+void	stretch_transl(t_pt_dets **map, double factor, double t_x, double t_y)
 {
-	ct_vars	idx;
+	t_ct_vars	idx;
 
 	idx.i = 0;
 	idx.j = 0;
@@ -71,9 +71,9 @@ void	stretch_transl(pt_dets **map, double factor, double t_x, double t_y)
 
 double	**mult_matrix(int x, int y, double **matrix1, double **matrix2)
 {
-	double	**new_matrix;
-	ct_vars	idx;
-	double	num;
+	double		**new_matrix;
+	t_ct_vars	idx;
+	double		num;
 
 	new_matrix = init_matrix(x, y);
 	idx.i = 0;

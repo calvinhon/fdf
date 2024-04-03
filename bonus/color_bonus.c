@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 17:05:52 by chon              #+#    #+#             */
-/*   Updated: 2024/03/29 14:19:22 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/03 18:55:52 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	get_rgb(int rgb, char c)
 
 int	calc_color(double fraction, double color1, double color2)
 {
-	color	c;
+	t_color	c;
 	int		beg_color;
 	int		end_color;
 
@@ -49,12 +49,20 @@ int	calc_color(double fraction, double color1, double color2)
 	return (c.r3 << 16 | c.g3 << 8 | c.b3);
 }
 
-void	assign_color(pt_dets **map, double min_z, double max_z)
+double	fraction(t_pt_dets p1, t_pt_dets p2, double dx, double dy)
 {
-	ct_vars	a;
-	double	range;
-	double	fraction;
-	double	adj;
+	if (dy > dx)
+		return ((p1.y - p2.y) / dy);
+	else
+		return ((p1.x - p2.x) / dx);
+}
+
+void	assign_color(t_pt_dets **map, double min_z, double max_z)
+{
+	t_ct_vars	a;
+	double		range;
+	double		fraction;
+	double		adj;
 
 	a.i = -1;
 	a.j = -1;
@@ -75,10 +83,10 @@ void	assign_color(pt_dets **map, double min_z, double max_z)
 	}
 }
 
-void	get_color(pt_dets **map)
+void	get_color(t_pt_dets **map)
 {
-	sizing	s;
-	ct_vars	a;
+	t_sizing	s;
+	t_ct_vars	a;
 
 	a.i = -1;
 	a.j = 0;

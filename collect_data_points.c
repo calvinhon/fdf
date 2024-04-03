@@ -6,17 +6,17 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:06:11 by chon              #+#    #+#             */
-/*   Updated: 2024/03/25 16:51:44 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/03 16:52:57 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	atoi_hex(char *str)
+int atoi_hex(char *str)
 {
-	int	num;
-	int	i;
-	int	x;
+	int num;
+	int i;
+	int x;
 
 	num = 0;
 	i = 2;
@@ -37,9 +37,9 @@ int	atoi_hex(char *str)
 	return (num);
 }
 
-void	point_color(char *str, pt_dets *point)
+void point_color(char *str, t_pt_dets *point)
 {
-	char			**hex;
+	char **hex;
 
 	hex = ft_split(str, ',');
 	point->z = (double)ft_atoi(hex[0]);
@@ -47,12 +47,12 @@ void	point_color(char *str, pt_dets *point)
 	free_array(hex);
 }
 
-pt_dets	*fill_data_points(char	**str, int row, int columns)
+t_pt_dets *fill_data_points(char **str, int row, int columns)
 {
-	pt_dets	*point;
-	int		i;
+	t_pt_dets *point;
+	int i;
 
-	point = malloc(sizeof(pt_dets) * (columns + 1));
+	point = malloc(sizeof(t_pt_dets) * (columns + 1));
 	if (!point)
 		return (NULL);
 	i = -1;
@@ -74,10 +74,10 @@ pt_dets	*fill_data_points(char	**str, int row, int columns)
 	return (point);
 }
 
-int	ct_non_spaces(char *str)
+int ct_non_spaces(char *str)
 {
-	int	i;
-	int	num;
+	int i;
+	int num;
 
 	i = 0;
 	num = 0;
@@ -94,18 +94,18 @@ int	ct_non_spaces(char *str)
 	return (num);
 }
 
-pt_dets	**collect_data_points(char **array)
+t_pt_dets **collect_data_points(char **array)
 {
-	ct_vars	a;
-	char	**elmnts;
-	pt_dets	**data_points;
+	ct_vars a;
+	char **elmnts;
+	t_pt_dets **data_points;
 
 	a.i = 0;
 	a.j = 0;
 	a.k = ct_non_spaces(array[0]);
 	while (array[a.j])
 		a.j++;
-	data_points = malloc(sizeof(pt_dets) * (a.j + 1));
+	data_points = malloc(sizeof(t_pt_dets) * (a.j + 1));
 	if (!data_points)
 		return (NULL);
 	a.i = -1;

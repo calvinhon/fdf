@@ -6,25 +6,25 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:51:24 by chon              #+#    #+#             */
-/*   Updated: 2024/03/28 13:48:06 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/03 16:52:56 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	plot(t_data *data, int x, int y, int color)
+void plot(t_data *data, int x, int y, int color)
 {
-	char	*dst;
+	char *dst;
 
 	if (x > 1919 || y > 1079 || x < 0 || y < 0)
-		return ;
+		return;
 	dst = data->addr + y * data->l_len + x * (data->bpp / 8);
 	*(unsigned int *)dst = color;
 }
 
-void	pixels(t_data img, pt_dets p1, pt_dets p2)
+void pixels(t_data img, t_pt_dets p1, t_pt_dets p2)
 {
-	line	b;
+	line b;
 
 	b.xi = 1;
 	b.yi = 1;
@@ -50,10 +50,10 @@ void	pixels(t_data img, pt_dets p1, pt_dets p2)
 	plot(&img, p1.x, p1.y, p1.color);
 }
 
-void	adjust_grid(pt_dets **map)
+void adjust_grid(t_pt_dets **map)
 {
-	ct_vars		a;
-	sizing		s;
+	ct_vars a;
+	sizing s;
 
 	a.i = -1;
 	a.j = -1;
@@ -78,10 +78,10 @@ void	adjust_grid(pt_dets **map)
 	stretch_transl(map, factor_calc(s.max_x, s.max_y), 0, 0);
 }
 
-void	rotate_map(double **r_matrix, pt_dets **map)
+void rotate_map(double **r_matrix, t_pt_dets **map)
 {
-	double	**map_matrix;
-	ct_vars	a;
+	double **map_matrix;
+	ct_vars a;
 
 	a.i = 0;
 	a.j = 0;
@@ -106,9 +106,9 @@ void	rotate_map(double **r_matrix, pt_dets **map)
 	free_db_array(r_matrix, 3);
 }
 
-void	create_grid(t_data img, pt_dets **map)
+void create_grid(t_data img, t_pt_dets **map)
 {
-	ct_vars	a;
+	ct_vars a;
 
 	a.i = -1;
 	a.j = -1;

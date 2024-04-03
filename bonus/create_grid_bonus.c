@@ -6,26 +6,25 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:51:24 by chon              #+#    #+#             */
-/*   Updated: 2024/04/02 17:32:01 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/03 19:50:36 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
 
-void	plot(mlx_vars *env, int x, int y, int color)
+void	plot(t_mlx_vars *env, int x, int y, int color)
 {
 	char	*dst;
 
-	// printf("%d,%d\n", x, y);
 	if (x > 1919 || y > 1079 || x < 0 || y < 0)
 		return ;
 	dst = env->addr + x * env->bpp / 8 + y * env->l_len;
 	*(unsigned int *)dst = color;
 }
 
-void	pixels(mlx_vars *env, pt_dets p1, pt_dets p2)
+void	pixels(t_mlx_vars *env, t_pt_dets p1, t_pt_dets p2)
 {
-	line	b;
+	t_line	b;
 
 	b.xi = 1;
 	b.yi = 1;
@@ -35,8 +34,8 @@ void	pixels(mlx_vars *env, pt_dets p1, pt_dets p2)
 	b.err = b.dx - b.dy;
 	while (roundf(fabs(p1.x - p2.x)) > 0 || roundf(fabs(p1.y - p2.y)) > 0)
 	{
-		plot(env, p1.x, p1.y, calc_color(1 - fabs((p1.y - p2.y) / b.dy),
-				p1.color, p2.color));
+		plot(env, p1.x, p1.y, calc_color(
+				1 - fabs(fraction(p1, p2, b.dx, b.dy)), p1.color, p2.color));
 		b.err2 = 2 * b.err;
 		if (b.err2 > -b.dy)
 		{
@@ -52,10 +51,10 @@ void	pixels(mlx_vars *env, pt_dets p1, pt_dets p2)
 	plot(env, p1.x, p1.y, p2.color);
 }
 
-void	adjust_grid(pt_dets **map)
+void	adjust_grid(t_pt_dets **map)
 {
-	ct_vars		a;
-	sizing		s;
+	t_ct_vars	a;
+	t_sizing	s;
 
 	a.i = -1;
 	a.j = 0;
@@ -80,25 +79,25 @@ void	adjust_grid(pt_dets **map)
 	stretch_transl(map, factor_calc(s.max_x, s.max_y), 0, 0);
 }
 
-void	rotate_map(double **r_matrix, pt_dets **map)
+void	rotate_map(double **r_matrix, t_mlx_vars *env)
 {
-	double	**map_matrix;
-	ct_vars	a;
+	double		**map_matrix;
+	t_ct_vars	a;
 
 	a.i = 0;
 	a.j = 0;
 	map_matrix = init_matrix(3, 1);
-	while (map[a.i])
+	while (env->map[a.i])
 	{
-		while (map[a.i][a.j].end)
+		while (env->map[a.i][a.j].end)
 		{
-			map_matrix[0][0] = map[a.i][a.j].x;
-			map_matrix[1][0] = map[a.i][a.j].y;
-			map_matrix[2][0] = map[a.i][a.j].z;
+			map_matrix[0][0] = env->map[a.i][a.j].x;
+			map_matrix[1][0] = env->map[a.i][a.j].y;
+			map_matrix[2][0] = env->map[a.i][a.j].z;
 			map_matrix = mult_matrix(3, 1, r_matrix, map_matrix);
-			map[a.i][a.j].x = map_matrix[0][0];
-			map[a.i][a.j].y = map_matrix[1][0];
-			map[a.i][a.j].z = map_matrix[2][0] * 1;
+			env->map[a.i][a.j].x = map_matrix[0][0];
+			env->map[a.i][a.j].y = map_matrix[1][0];
+			env->map[a.i][a.j].z = map_matrix[2][0];
 			a.j++;
 		}
 		a.j = 0;
@@ -108,18 +107,19 @@ void	rotate_map(double **r_matrix, pt_dets **map)
 	free_db_array(r_matrix, 3);
 }
 
-
-void	create_grid(mlx_vars *env, pt_dets **map)
+void	create_grid(t_mlx_vars *env, t_pt_dets **map)
 {
-	ct_vars	a;
+	t_ct_vars	a;
 
 	a.i = -1;
 	a.j = -1;
 	ft_bzero(env->addr, 1920 * 1080 * (env->bpp / 8));
-	stretch_transl(map, env->adj.zoom_factor, 
+	stretch_transl(map, env->adj.zoom_factor,
 		env->adj.x_offset, env->adj.y_offset);
-	rotate_map(z_r(init_matrix(3, 3), M_PI / 4 * env->adj.rotate_z), env->map);
-	rotate_map(x_r(init_matrix(3, 3), env->adj.rotate_x), env->map);
+	// printf("r_z:%f r_x:%f\n", env->adj.rotate_z, env->adj.rotate_x);
+	// printf("off_x:%d off_y:%d\n", env->adj.x_offset, env->adj.y_offset);
+	rotate_map(z_r(init_matrix(3, 3), env->adj.rotate_z), env);
+	rotate_map(x_r(init_matrix(3, 3), env->adj.rotate_x), env);
 	while (map[++a.i])
 	{
 		while (map[a.i][++a.j + 1].end)

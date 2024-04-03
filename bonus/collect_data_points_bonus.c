@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:06:11 by chon              #+#    #+#             */
-/*   Updated: 2024/03/28 16:54:47 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/03 17:09:10 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int	atoi_hex(char *str)
 	return (num);
 }
 
-void	point_color(char *str, pt_dets *point)
+void	point_color(char *str, t_pt_dets *point)
 {
-	char			**hex;
+	char	**hex;
 
 	hex = ft_split(str, ',');
 	point->z = (double)ft_atoi(hex[0]);
@@ -47,12 +47,12 @@ void	point_color(char *str, pt_dets *point)
 	free_array(hex);
 }
 
-pt_dets	*fill_map(char	**str, int row, int columns)
+t_pt_dets	*fill_map(char **str, int row, int columns)
 {
-	pt_dets	*point;
-	int		i;
+	t_pt_dets	*point;
+	int			i;
 
-	point = malloc(sizeof(pt_dets) * (columns + 1));
+	point = malloc(sizeof(t_pt_dets) * (columns + 1));
 	if (!point)
 		return (NULL);
 	i = -1;
@@ -94,18 +94,18 @@ int	ct_non_spaces(char *str)
 	return (num);
 }
 
-pt_dets	**collect_data_points(char **array)
+t_pt_dets	**collect_data_points(char **array)
 {
-	ct_vars	a;
-	char	**elmnts;
-	pt_dets	**map;
+	t_ct_vars	a;
+	char		**elmnts;
+	t_pt_dets	**map;
 
 	a.i = 0;
 	a.j = 0;
 	a.k = ct_non_spaces(array[0]);
 	while (array[a.j])
 		a.j++;
-	map = malloc(sizeof(pt_dets) * (a.j + 1));
+	map = malloc(sizeof(t_pt_dets) * (a.j + 1));
 	if (!map)
 		return (NULL);
 	a.i = -1;

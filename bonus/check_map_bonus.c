@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:17:42 by chon              #+#    #+#             */
-/*   Updated: 2024/03/27 13:30:11 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/03 17:19:15 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	is_hex(char *str)
 	i = 2;
 	if (ft_strlen(str) > 10 || ft_strlen(str) < 3)
 		return (0);
-	if (!(str[0] == '0'	&& (str[1] == 'x' || str[1] == 'X')))
+	if (!(str[0] == '0' && (str[1] == 'x' || str[1] == 'X')))
 		return (0);
 	while (str[i])
 	{
@@ -71,9 +71,9 @@ int	is_decimal(char *str)
 
 int	check_elmnts(char **array)
 {
-	ct_vars	a;
-	char	**elmnts;
-	char	**color;
+	t_ct_vars	a;
+	char		**elmnts;
+	char		**color;
 
 	a.i = -1;
 	a.j = -1;
@@ -100,8 +100,8 @@ int	check_elmnts(char **array)
 
 int	check_map(char **array)
 {
-	ct_vars	a;
-	int		point_ct2;
+	t_ct_vars	a;
+	int			point_ct2;
 
 	a.i = -1;
 	a.j = 0;

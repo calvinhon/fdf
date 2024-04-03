@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_grid_utils2_bonus.c                         :+:      :+:    :+:   */
+/*   utils2_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 17:05:52 by chon              #+#    #+#             */
-/*   Updated: 2024/03/21 14:35:56 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/03 18:21:30 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	free_db_array(double **array, int x)
 
 	i = -1;
 	while (++i < x)
-		free (array[i]);
-	free (array);
+		free(array[i]);
+	free(array);
 }
 
 void	free_array(char **array)
@@ -28,11 +28,11 @@ void	free_array(char **array)
 
 	i = -1;
 	while (array[++i])
-		free (array[i]);
-	free (array);
+		free(array[i]);
+	free(array);
 }
 
-void	increment(pt_dets p1, pt_dets p2, int *x, int *y)
+void	increment(t_pt_dets p1, t_pt_dets p2, int *x, int *y)
 {
 	if (p1.x > p2.x)
 		*x = -1;
