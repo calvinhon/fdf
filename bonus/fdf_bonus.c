@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:41:49 by chon              #+#    #+#             */
-/*   Updated: 2024/04/03 20:05:18 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/04 18:38:07 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,20 @@ void	init_rotation(t_mlx_vars *env)
 {
 	if (env->adj.project)
 	{
-		rotate_map(z_r(init_matrix(3, 3), M_PI / 4), env);
-		rotate_map(x_r(init_matrix(3, 3), atan(sqrt(2))), env);
-		// stretch_transl(env->map, 1, 200, 100);
- 		// printf("iso\n");
+		env->adj.rotate_z = M_PI / 4;
+		env->adj.rotate_x = atan(sqrt(2));
 	}
 	else if (!env->adj.project)
 	{
-		rotate_map(x_r_inverse(init_matrix(3, 3), atan(sqrt(2))), env);		
-		rotate_map(z_r_inverse(init_matrix(3, 3), M_PI / 4), env);
-		// stretch_transl(env->map, 1, -100, 100);
-		// printf("parallel\n");
+		env->adj.rotate_z = 0;
+		env->adj.rotate_x = 0;
 	}
-	// adjust_grid(env->map);
 }
 
 void	setup_img(t_mlx_vars *env, char **array)
 {
 	int	i;
 
-	reset_transformation(env);
 	i = -1;
 	env->map = collect_data_points(array);
 	if (!env->map)
@@ -44,9 +38,12 @@ void	setup_img(t_mlx_vars *env, char **array)
 		exit(0);
 	}
 	env->adj.project = 1;
+	env->adj.height_factor = 0.05;
+	env->adj.x_offset = 0;
+	env->adj.y_offset = 0;
+	env->adj.zoom_factor = 1;
+	init_sizing(env);
 	init_rotation(env);
-	// adjust_grid(env->map);
-	// stretch_transl(env->map, 1, 200, 100);
 	set_controls(env);
 	create_grid(env, env->map);
 	mlx_loop(env->mlx);
