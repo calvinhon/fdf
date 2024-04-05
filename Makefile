@@ -6,7 +6,7 @@
 #    By: chon <chon@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 12:58:35 by chon              #+#    #+#              #
-#    Updated: 2024/04/04 13:51:23 by chon             ###   ########.fr        #
+#    Updated: 2024/04/05 16:28:00 by chon             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ utils1.c utils2.c utils3.c set_controls.c
 OBJS_B = $(BONUS:.c=.o)
 BONUS = ./bonus/fdf_bonus.c ./bonus/check_map_bonus.c \
 ./bonus/collect_data_points_bonus.c ./bonus/create_grid_bonus.c \
-./bonus/utils1_bonus.c ./bonus/utils2_bonus.c ./bonus/utils3_bonus.c \
+./bonus/utils1_bonus.c ./bonus/utils2_bonus.c \
 ./bonus/set_controls_bonus.c ./bonus/set_controls2_bonus.c ./bonus/color_bonus.c
 
 $(NAME): $(OBJS)

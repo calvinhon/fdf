@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:59:49 by chon              #+#    #+#             */
-/*   Updated: 2024/04/04 18:56:27 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/05 17:44:06 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,20 @@ double	min(int n, ...)
 	return (min_num);
 }
 
+void	init_rotation(t_mlx_vars *env)
+{
+	if (env->adj.project)
+	{
+		env->adj.rotate_z = M_PI / 4;
+		env->adj.rotate_x = atan(sqrt(2));
+	}
+	else if (!env->adj.project)
+	{
+		env->adj.rotate_z = 0;
+		env->adj.rotate_x = 0;
+	}
+}
+
 t_pt_dets	rotate_x(t_pt_dets pt, t_mlx_vars *env)
 {
 	t_pt_dets	new_pt;
@@ -67,20 +81,5 @@ t_pt_dets	rotate_z(t_pt_dets pt, t_mlx_vars *env)
 	new_pt = pt;
 	new_pt.x = pt.x * cos(env->adj.rotate_z) - pt.y * sin(env->adj.rotate_z);
 	new_pt.y = pt.x * sin(env->adj.rotate_z) + pt.y * cos(env->adj.rotate_z);
-	return (new_pt);
-}
-
-t_pt_dets	adjust_pt(t_mlx_vars *env, t_pt_dets pt)
-{
-	t_pt_dets	new_pt;
-
-	new_pt = pt;
-	new_pt.z = pt.z * env->adj.height_factor;
-	new_pt = rotate_z(new_pt, env);
-	new_pt = rotate_x(new_pt, env);
-	new_pt.x *= env->adj.init_zoom_factor * env->adj.zoom_factor;
-	new_pt.x += env->adj.init_x_offset + env->adj.x_offset;
-	new_pt.y *= env->adj.init_zoom_factor * env->adj.zoom_factor;
-	new_pt.y += env->adj.init_y_offset + env->adj.y_offset;
 	return (new_pt);
 }

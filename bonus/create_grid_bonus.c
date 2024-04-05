@@ -6,11 +6,17 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:51:24 by chon              #+#    #+#             */
-/*   Updated: 2024/04/04 19:03:52 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/05 18:24:30 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf_bonus.h"
+
+void	cast_image(t_mlx_vars *env)
+{
+	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
+	fdf_legend(env);
+}
 
 void	plot(t_mlx_vars *env, int x, int y, int color)
 {
@@ -35,7 +41,7 @@ void	pixels(t_mlx_vars *env, t_pt_dets p1, t_pt_dets p2)
 	while (roundf(fabs(p1.x - p2.x)) > 0 || roundf(fabs(p1.y - p2.y)) > 0)
 	{
 		plot(env, p1.x, p1.y, calc_color(
-				1 - fabs(fraction(p1, p2, b.dx, b.dy)), p1.color, p2.color));
+				1 - fabs(col_fract(p1, p2, b.dx, b.dy)), p1.color, p2.color));
 		b.err2 = 2 * b.err;
 		if (b.err2 > -b.dy)
 		{
@@ -51,35 +57,25 @@ void	pixels(t_mlx_vars *env, t_pt_dets p1, t_pt_dets p2)
 	plot(env, p1.x, p1.y, p2.color);
 }
 
-void	init_sizing(t_mlx_vars *env)
+t_pt_dets	adjust_pt(t_mlx_vars *env, t_pt_dets pt)
 {
-	t_ct_vars	a;
-	t_sizing	s;
+	t_pt_dets	new_pt;
 
-	a.i = -1;
-	a.j = 0;
-	s.max_x = env->map[0][0].x;
-	s.max_y = env->map[0][0].y;
-	while (env->map[++a.i])
-	{
-		while (env->map[a.i][a.j].end)
-		{
-			s.max_x = max(2, env->map[a.i][a.j].x, s.max_x);
-			s.max_y = max(2, env->map[a.i][a.j++].y, s.max_y);
-		}
-		a.j = 0;
-	}
-	env->adj.init_x_offset = 500;
-	env->adj.init_y_offset = 300;
-	env->adj.init_zoom_factor = factor_calc(s.max_x, s.max_y);
+	new_pt = pt;
+	new_pt.z = pt.z * env->adj.height_factor;
+	new_pt = rotate_z(new_pt, env);
+	new_pt = rotate_x(new_pt, env);
+	new_pt.x *= env->adj.init_zoom_factor * env->adj.zoom_factor;
+	new_pt.x += env->adj.init_x_offset + env->adj.x_offset;
+	new_pt.y *= env->adj.init_zoom_factor * env->adj.zoom_factor;
+	new_pt.y += env->adj.init_y_offset + env->adj.y_offset;
+	return (new_pt);
 }
 
 void	create_grid(t_mlx_vars *env, t_pt_dets **map)
 {
 	t_ct_vars	a;
-	t_pt_dets	p1;
-	t_pt_dets	p2;
-	t_pt_dets	p3;
+	t_mult_pts	p;
 
 	a.i = -1;
 	a.j = -1;
@@ -88,20 +84,19 @@ void	create_grid(t_mlx_vars *env, t_pt_dets **map)
 	{
 		while (map[a.i][++a.j].end)
 		{
-			p1 = adjust_pt(env, map[a.i][a.j]);
+			p.x1 = adjust_pt(env, map[a.i][a.j]);
 			if (map[a.i][a.j + 1].end)
 			{
-				p2 = adjust_pt(env, map[a.i][a.j + 1]);
-				pixels(env, p1, p2);
+				p.x2 = adjust_pt(env, map[a.i][a.j + 1]);
+				pixels(env, p.x1, p.x2);
 			}
 			if (map[a.i + 1])
 			{
-				p3 = adjust_pt(env, map[a.i + 1][a.j]);
-				pixels(env, p1, p3);
+				p.x3 = adjust_pt(env, map[a.i + 1][a.j]);
+				pixels(env, p.x1, p.x3);
 			}
 		}
 		a.j = -1;
 	}
-	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
-	fdf_legend(env);
+	cast_image(env);
 }

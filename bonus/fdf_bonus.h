@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:28:27 by chon              #+#    #+#             */
-/*   Updated: 2024/04/04 19:00:46 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/05 18:25:09 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_ct_vars
 	int	j;
 	int	k;
 	int	point_ct1;
+	int	point_ct2;
 }	t_ct_vars;
 
 typedef struct s_line
@@ -72,6 +73,13 @@ typedef struct s_t_pt_dets
 	int		color;
 	int		end;
 }	t_pt_dets;
+
+typedef struct s_mult_pts
+{
+	t_pt_dets	x1;
+	t_pt_dets	x2;
+	t_pt_dets	x3;
+}	t_mult_pts;
 
 typedef struct s_color
 {
@@ -103,28 +111,24 @@ typedef struct s_t_mlx_vars
 int			check_map(char **array);
 t_pt_dets	**collect_data_points(char **array);
 void		create_grid(t_mlx_vars *env, t_pt_dets **map);
-double		**mult_matrix(int x, int y, double **matrix1, double **matrix2);
-double		**init_matrix(int x, int y);
-void		init_sizing(t_mlx_vars *env);
+int			ct_non_spaces(char *str);
 double		min(int n, ...);
 double		max(int n, ...);
-double		**x_r(double **matrix, double x);
-double		**z_r(double **matrix, double x);
-t_pt_dets	adjust_pt(t_mlx_vars *env, t_pt_dets point);
+double		init_zoom_calc(double x, double y);
+void		init_rotation(t_mlx_vars *env);
+t_pt_dets	rotate_z(t_pt_dets pt, t_mlx_vars *env);
+t_pt_dets	rotate_x(t_pt_dets pt, t_mlx_vars *env);
 void		set_controls(t_mlx_vars *env);
 void		key_triggers(int key, t_mlx_vars *env);
 int			mouse(int key, int x, int y, t_mlx_vars *env);
+void		projection(t_mlx_vars *env);
 void		fdf_legend(t_mlx_vars *env);
 void		increment(t_pt_dets p1, t_pt_dets p2, int *x, int *y);
-void		free_array(char **array);
-double		factor_calc(double x, double y);
-int			free_and_return(char **str, int num);
 void		get_color(t_pt_dets **map);
 int			calc_color(double fraction, double color1, double color2);
-void		projection(t_mlx_vars *env);
-double		fraction(t_pt_dets p1, t_pt_dets p2, double dx, double dy);
-void		init_rotation(t_mlx_vars *env);
-double		**z_r_inverse(double **matrix, double x);
-double		**x_r_inverse(double **matrix, double x);
+double		col_fract(t_pt_dets p1, t_pt_dets p2, double dx, double dy);
+void		free_array(char **array);
+int			free_and_return(char **str, int num);
+int			err_msg_and_return(char *str, int num);
 
 #endif

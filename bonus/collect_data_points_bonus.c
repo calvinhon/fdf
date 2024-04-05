@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:06:11 by chon              #+#    #+#             */
-/*   Updated: 2024/04/03 17:09:10 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/05 17:14:50 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,37 +85,38 @@ int	ct_non_spaces(char *str)
 	{
 		while (str[i] == ' ')
 			i++;
-		num++;
+		if (str[i])
+			num++;
 		while (str[i] && str[i] != ' ')
 			i++;
 	}
-	if (str[i - 1] == ' ')
-		num--;
 	return (num);
 }
 
 t_pt_dets	**collect_data_points(char **array)
 {
-	t_ct_vars	a;
+	int			i;
+	int			rows;
+	int			cols;
 	char		**elmnts;
 	t_pt_dets	**map;
 
-	a.i = 0;
-	a.j = 0;
-	a.k = ct_non_spaces(array[0]);
-	while (array[a.j])
-		a.j++;
-	map = malloc(sizeof(t_pt_dets) * (a.j + 1));
+	i = 0;
+	rows = 0;
+	cols = ct_non_spaces(array[0]);
+	while (array[rows])
+		rows++;
+	map = malloc(sizeof(t_pt_dets) * (rows + 1));
 	if (!map)
 		return (NULL);
-	a.i = -1;
-	while (++a.i < a.j)
+	i = -1;
+	while (++i < rows)
 	{
-		elmnts = ft_split(array[a.i], ' ');
-		map[a.i] = fill_map(elmnts, a.i, a.k);
+		elmnts = ft_split(array[i], ' ');
+		map[i] = fill_map(elmnts, i, cols);
 		free_array(elmnts);
 	}
-	map[a.i] = NULL;
+	map[i] = NULL;
 	get_color(map);
 	return (map);
 }

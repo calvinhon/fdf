@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 17:05:52 by chon              #+#    #+#             */
-/*   Updated: 2024/04/03 18:55:52 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/05 18:06:11 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	calc_color(double fraction, double color1, double color2)
 	return (c.r3 << 16 | c.g3 << 8 | c.b3);
 }
 
-double	fraction(t_pt_dets p1, t_pt_dets p2, double dx, double dy)
+double	col_fract(t_pt_dets p1, t_pt_dets p2, double dx, double dy)
 {
 	if (dy > dx)
 		return ((p1.y - p2.y) / dy);

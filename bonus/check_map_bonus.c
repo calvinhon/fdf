@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:17:42 by chon              #+#    #+#             */
-/*   Updated: 2024/04/03 17:19:15 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/05 18:09:29 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,20 @@ int	is_hex(char *str)
 
 int	check_color(char **elmnts)
 {
-	int		k;
+	int		i;
 	int		count;
 
-	k = 0;
+	i = 0;
 	count = 0;
-	if (elmnts[1])
+	while (elmnts[i])
 	{
-		while (elmnts[1][k])
-		{
-			if (elmnts[1][k++] == ',')
-				count++;
-			if (count > 1)
-				return (0);
-		}
-		if (is_hex(elmnts[1]) == 0)
+		count++;
+		i++;
+		if (count > 2)
 			return (0);
 	}
+	if (is_hex(elmnts[1]) == 0)
+		return (0);
 	return (1);
 }
 
@@ -101,27 +98,17 @@ int	check_elmnts(char **array)
 int	check_map(char **array)
 {
 	t_ct_vars	a;
-	int			point_ct2;
 
 	a.i = -1;
 	a.j = 0;
-	point_ct2 = 0;
+	a.point_ct2 = 0;
 	while (array[++a.i])
 	{
-		while (array[a.i][a.j])
-		{
-			while (array[a.i][a.j] == ' ')
-				a.j++;
-			if (array[a.i][a.j])
-				point_ct2++;
-			if (a.i == 0)
-				a.point_ct1 = point_ct2;
-			while (array[a.i][a.j] && array[a.i][a.j] != ' ')
-				a.j++;
-		}
-		if (a.point_ct1 != point_ct2)
+		a.point_ct2 = ct_non_spaces(array[a.i]);
+		if (a.i == 0)
+			a.point_ct1 = a.point_ct2;
+		if (a.point_ct1 != a.point_ct2)
 			return (0);
-		point_ct2 = 0;
 		a.j = 0;
 	}
 	return (check_elmnts(array));
