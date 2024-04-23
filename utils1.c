@@ -6,17 +6,17 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 16:59:49 by chon              #+#    #+#             */
-/*   Updated: 2024/04/03 16:52:56 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/08 15:53:34 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-double max(int n, ...)
+double	max(int n, ...)
 {
-	va_list args;
-	double max_num;
-	double cur;
+	va_list	args;
+	double	max_num;
+	double	cur;
 
 	va_start(args, n);
 	max_num = va_arg(args, double);
@@ -31,11 +31,11 @@ double max(int n, ...)
 	return (max_num);
 }
 
-double min(int n, ...)
+double	min(int n, ...)
 {
-	va_list args;
-	double min_num;
-	double cur;
+	va_list	args;
+	double	min_num;
+	double	cur;
 
 	va_start(args, n);
 	min_num = va_arg(args, double);
@@ -50,69 +50,30 @@ double min(int n, ...)
 	return (min_num);
 }
 
-void stretch_transl(t_pt_dets **map, double factor, double t_x, double t_y)
+void	init_rotation(t_mlx_vars *env)
 {
-	ct_vars idx;
-
-	idx.i = 0;
-	idx.j = 0;
-	while (map[idx.i])
-	{
-		while (map[idx.i][idx.j].end)
-		{
-			map[idx.i][idx.j].x = map[idx.i][idx.j].x * factor + t_x;
-			map[idx.i][idx.j].y = map[idx.i][idx.j].y * factor + t_y;
-			idx.j++;
-		}
-		idx.j = 0;
-		idx.i++;
-	}
+	env->adj.rotate_z = M_PI / 4;
+	env->adj.rotate_x = atan(sqrt(2));
 }
 
-double **mult_matrix(int x, int y, double **matrix1, double **matrix2)
+t_pt_dets	rotate_x(t_pt_dets pt, t_mlx_vars *env)
 {
-	double **new_matrix;
-	ct_vars idx;
-	double num;
+	t_pt_dets	new_pt;
 
-	new_matrix = init_matrix(x, y);
-	idx.i = 0;
-	idx.j = 0;
-	idx.k = -1;
-	num = 0;
-	while (idx.i < x)
-	{
-		while (idx.j < y)
-		{
-			while (++idx.k < x)
-				num += matrix1[idx.i][idx.k] * matrix2[idx.k][idx.j];
-			new_matrix[idx.i][idx.j] = num;
-			num = 0;
-			idx.k = -1;
-			idx.j++;
-		}
-		idx.j = 0;
-		idx.i++;
-	}
-	free(matrix2);
-	return (new_matrix);
+	new_pt = pt;
+	new_pt.y = pt.y * cos(env->adj.rotate_x)
+		- pt.z * sin(env->adj.rotate_x) * .5;
+	new_pt.z = pt.y * sin(env->adj.rotate_x)
+		+ pt.z * cos(env->adj.rotate_x) * .5;
+	return (new_pt);
 }
 
-double **init_matrix(int x, int y)
+t_pt_dets	rotate_z(t_pt_dets pt, t_mlx_vars *env)
 {
-	double **matrix;
-	int i;
+	t_pt_dets	new_pt;
 
-	matrix = ft_calloc(x, sizeof(double));
-	if (!matrix)
-		return (NULL);
-	i = 0;
-	while (i < x)
-	{
-		matrix[i] = ft_calloc(y, sizeof(double));
-		if (!matrix[i])
-			return (NULL);
-		i++;
-	}
-	return (matrix);
+	new_pt = pt;
+	new_pt.x = pt.x * cos(env->adj.rotate_z) - pt.y * sin(env->adj.rotate_z);
+	new_pt.y = pt.x * sin(env->adj.rotate_z) + pt.y * cos(env->adj.rotate_z);
+	return (new_pt);
 }

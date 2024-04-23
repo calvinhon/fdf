@@ -22,7 +22,6 @@
 # include <stdarg.h>
 # include <math.h>
 # include <string.h>
-# include <float.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1000

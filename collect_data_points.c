@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   collect_data_points.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: hbui-vu <hbui-vu@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:06:11 by chon              #+#    #+#             */
-/*   Updated: 2024/04/03 16:52:57 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/05 20:28:24 by hbui-vu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int atoi_hex(char *str)
+int	atoi_hex(char *str)
 {
-	int num;
-	int i;
-	int x;
+	int	num;
+	int	i;
+	int	x;
 
 	num = 0;
 	i = 2;
@@ -37,9 +37,9 @@ int atoi_hex(char *str)
 	return (num);
 }
 
-void point_color(char *str, t_pt_dets *point)
+void	point_color(char *str, t_pt_dets *point)
 {
-	char **hex;
+	char	**hex;
 
 	hex = ft_split(str, ',');
 	point->z = (double)ft_atoi(hex[0]);
@@ -47,10 +47,10 @@ void point_color(char *str, t_pt_dets *point)
 	free_array(hex);
 }
 
-t_pt_dets *fill_data_points(char **str, int row, int columns)
+t_pt_dets	*fill_map(char **str, int row, int columns)
 {
-	t_pt_dets *point;
-	int i;
+	t_pt_dets	*point;
+	int			i;
 
 	point = malloc(sizeof(t_pt_dets) * (columns + 1));
 	if (!point)
@@ -65,7 +65,7 @@ t_pt_dets *fill_data_points(char **str, int row, int columns)
 		if (str[i] && !ft_strchr(str[i], ','))
 		{
 			point[i].z = (double)ft_atoi(str[i]);
-			point[i].color = 0xffffff;
+			point[i].color = 0;
 		}
 		else if (str[i])
 			point_color(str[i], &point[i]);
@@ -74,10 +74,10 @@ t_pt_dets *fill_data_points(char **str, int row, int columns)
 	return (point);
 }
 
-int ct_non_spaces(char *str)
+int	ct_non_spaces(char *str)
 {
-	int i;
-	int num;
+	int	i;
+	int	num;
 
 	i = 0;
 	num = 0;
@@ -85,36 +85,38 @@ int ct_non_spaces(char *str)
 	{
 		while (str[i] == ' ')
 			i++;
-		num++;
+		if (str[i])
+			num++;
 		while (str[i] && str[i] != ' ')
 			i++;
 	}
-	if (str[i - 1] == ' ')
-		num--;
 	return (num);
 }
 
-t_pt_dets **collect_data_points(char **array)
+t_pt_dets	**collect_data_points(char **array)
 {
-	ct_vars a;
-	char **elmnts;
-	t_pt_dets **data_points;
+	int			i;
+	int			rows;
+	int			cols;
+	char		**elmnts;
+	t_pt_dets	**map;
 
-	a.i = 0;
-	a.j = 0;
-	a.k = ct_non_spaces(array[0]);
-	while (array[a.j])
-		a.j++;
-	data_points = malloc(sizeof(t_pt_dets) * (a.j + 1));
-	if (!data_points)
+	i = 0;
+	rows = 0;
+	cols = ct_non_spaces(array[0]);
+	while (array[rows])
+		rows++;
+	map = malloc(sizeof(t_pt_dets) * (rows + 1));
+	if (!map)
 		return (NULL);
-	a.i = -1;
-	while (++a.i < a.j)
+	i = -1;
+	while (++i < rows)
 	{
-		elmnts = ft_split(array[a.i], ' ');
-		data_points[a.i] = fill_data_points(elmnts, a.i, a.k);
+		elmnts = ft_split(array[i], ' ');
+		map[i] = fill_map(elmnts, i, cols);
 		free_array(elmnts);
 	}
-	data_points[a.i] = NULL;
-	return (data_points);
+	map[i] = NULL;
+	get_color(map);
+	return (map);
 }

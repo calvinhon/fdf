@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 17:05:52 by chon              #+#    #+#             */
-/*   Updated: 2024/04/05 18:06:57 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/08 14:58:29 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ void	free_array(char **array)
 	free(array);
 }
 
-int	free_and_return(char **str, int num)
+int	free_and_return(char **array, int num)
 {
-	free_array(str);
+	if (array)
+		free_array(array);
 	return (num);
 }
 

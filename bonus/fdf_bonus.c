@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:41:49 by chon              #+#    #+#             */
-/*   Updated: 2024/04/05 18:07:56 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/08 15:13:59 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,6 @@ void	init_sizing(t_mlx_vars *env)
 
 void	setup_img(t_mlx_vars *env, char **array)
 {
-	int	i;
-
-	i = -1;
 	env->map = collect_data_points(array);
 	if (!env->map)
 	{
@@ -51,9 +48,6 @@ void	setup_img(t_mlx_vars *env, char **array)
 	set_controls(env);
 	create_grid(env, env->map);
 	mlx_loop(env->mlx);
-	while (env->map[++i])
-		free(env->map[i]);
-	free(env->map);
 }
 
 t_mlx_vars	*init_env(void)
@@ -91,6 +85,7 @@ char	*pull_elements(char *str)
 	char	*elements;
 	char	*line;
 
+	elements = NULL;
 	str = ft_strjoin(ft_strdup("./test_maps/"), str);
 	fd = open(str, O_RDONLY);
 	if (fd == -1)
@@ -118,19 +113,18 @@ int	main(int ac, char **av)
 		elements = pull_elements(av[1]);
 		array = ft_split(elements, '\n');
 		free(elements);
-		if (!array)
-			err_msg_and_return("Insufficient memory\n", 1);
-		else if (check_map(array) == 0)
+		if (check_map(array) == 0 || !array)
 		{
 			ft_putstr_fd("Invalid map\n", 1);
 			free_and_return(array, 1);
+			exit(0);
 		}
 		env = init_env();
 		if (!env)
 			free_and_return(array, 1);
 		setup_img(env, array);
 	}
-	else if (ac == 1)
-		ft_putstr_fd("Add map as input\n", 1);
+	else if (ac != 2)
+		ft_putstr_fd("Requires one and only one input as the map\n", 1);
 	return (0);
 }

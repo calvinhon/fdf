@@ -6,85 +6,120 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:28:27 by chon              #+#    #+#             */
-/*   Updated: 2024/04/03 16:52:56 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/08 14:54:38 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
-#define FDF_H
+# define FDF_H
 
-#include "libft/libft.h"
-#include "mlx/mlx.h"
+# include "libft/libft.h"
+# include "mlx/mlx.h"
 
-#define TEXT_COLOR 0xFFFFFF
+# define WHITE 0xFFFFFF
+# define GOLD 0xFFD700
+# define OLIVE 0x808000
+# define LIME 0x32CD32
+# define PURPLE 0x800080
+# define OFFSET 300
 
-typedef struct s_data
+typedef struct s_transform
 {
-	void *img;
-	char *addr;
-	int bpp;
-	int l_len;
-	int endian;
-} t_data;
-
-typedef struct s_t_mlx_vars
-{
-	void *mlx;
-	void *win;
-} t_mlx_vars;
+	int		init_x_offset;
+	int		init_y_offset;
+	double	init_zoom_factor;
+	double	rotate_z;
+	double	rotate_x;
+}	t_transform;
 
 typedef struct s_ct_vars
 {
-	int i;
-	int j;
-	int k;
-	int point_ct1;
-} ct_vars;
+	int	i;
+	int	j;
+	int	k;
+	int	point_ct1;
+	int	point_ct2;
+}	t_ct_vars;
 
 typedef struct s_line
 {
-	int dy;
-	int dx;
-	int xi;
-	int yi;
-	int err;
-	int err2;
-} line;
+	int	dy;
+	int	dx;
+	int	xi;
+	int	yi;
+	int	err;
+	int	err2;
+}	t_line;
 
 typedef struct s_sizing
 {
-	double min_x;
-	double min_y;
-	double max_x;
-	double max_y;
-	double t;
-	double factor;
-} sizing;
+	double	max_x;
+	double	max_y;
+	double	min_z;
+	double	max_z;
+	double	t;
+}	t_sizing;
 
-typedef struct s_point
+typedef struct s_t_pt_dets
 {
-	double x;
-	double y;
-	double z;
-	int color;
-	int end;
-} t_pt_dets;
+	double	x;
+	double	y;
+	double	z;
+	int		color;
+	int		end;
+}	t_pt_dets;
 
-int check_map(char **array);
-t_pt_dets **collect_data_points(char **array);
-void create_grid(t_data img, t_pt_dets **map);
-double **mult_matrix(int x, int y, double **matrix1, double **matrix2);
-double **init_matrix(int x, int y);
-double min(int n, ...);
-double max(int n, ...);
-double **x_r(double **matrix, double x);
-double **z_r(double **matrix, double x);
-void stretch_transl(t_pt_dets **map, double factor, double t_x, double t_y);
-void set_controls(t_mlx_vars vars);
-void increment(t_pt_dets p1, t_pt_dets p2, int *x, int *y);
-void free_array(char **array);
-void free_db_array(double **array, int x);
-double factor_calc(double x, double y);
-int free_and_return(char **str, int num);
+typedef struct s_mult_pts
+{
+	t_pt_dets	x1;
+	t_pt_dets	x2;
+	t_pt_dets	x3;
+}	t_mult_pts;
+
+typedef struct s_color
+{
+	int	r1;
+	int	g1;
+	int	b1;
+	int	r2;
+	int	g2;
+	int	b2;
+	int	r3;
+	int	g3;
+	int	b3;
+	int	color;
+}	t_color;
+
+typedef struct s_t_mlx_vars
+{
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*addr;
+	int			bpp;
+	int			l_len;
+	int			end;
+	t_pt_dets	**map;
+	t_transform	adj;
+}	t_mlx_vars;
+
+int			check_map(char **array);
+t_pt_dets	**collect_data_points(char **array);
+void		create_grid(t_mlx_vars *env, t_pt_dets **map);
+int			ct_non_spaces(char *str);
+double		min(int n, ...);
+double		max(int n, ...);
+double		init_zoom_calc(double x, double y);
+void		init_rotation(t_mlx_vars *env);
+t_pt_dets	rotate_z(t_pt_dets pt, t_mlx_vars *env);
+t_pt_dets	rotate_x(t_pt_dets pt, t_mlx_vars *env);
+void		set_controls(t_mlx_vars *env);
+void		increment(t_pt_dets p1, t_pt_dets p2, int *x, int *y);
+void		get_color(t_pt_dets **map);
+int			calc_color(double fraction, double color1, double color2);
+double		col_fract(t_pt_dets p1, t_pt_dets p2, double dx, double dy);
+void		free_array(char **array);
+int			free_and_return(char **array, int num);
+int			err_msg_and_return(char *str, int num);
 
 #endif

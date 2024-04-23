@@ -6,44 +6,85 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:41:49 by chon              #+#    #+#             */
-/*   Updated: 2024/04/03 16:52:56 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/08 15:14:26 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void setup_img(t_mlx_vars vars, char **array)
+void	init_sizing(t_mlx_vars *env)
 {
-	t_data img;
-	t_pt_dets **clean_map;
-	int i;
+	t_ct_vars	a;
+	t_sizing	s;
 
-	i = -1;
-	vars.win = mlx_new_window(vars.mlx, 1920, 1080, "fdf");
-	img.img = mlx_new_image(vars.mlx, 1920, 1080);
-	clean_map = collect_data_points(array);
-	if (!clean_map)
+	a.i = -1;
+	a.j = 0;
+	s.max_x = env->map[0][0].x;
+	s.max_y = env->map[0][0].y;
+	while (env->map[++a.i])
+	{
+		while (env->map[a.i][a.j].end)
+		{
+			s.max_x = max(2, env->map[a.i][a.j].x, s.max_x);
+			s.max_y = max(2, env->map[a.i][a.j++].y, s.max_y);
+		}
+		a.j = 0;
+	}
+	env->adj.init_x_offset = 500;
+	env->adj.init_y_offset = 400;
+	env->adj.init_zoom_factor = init_zoom_calc(s.max_x, s.max_y);
+}
+
+void	setup_img(t_mlx_vars *env, char **array)
+{
+	env->map = collect_data_points(array);
+	if (!env->map)
 	{
 		free_array(array);
 		exit(0);
 	}
-	create_grid(img, clean_map);
-	while (clean_map[++i])
-		free(clean_map[i]);
-	free(clean_map);
-	mlx_put_image_to_window(vars.mlx, vars.win, img.img, 0, 0);
-	set_controls(vars);
+	init_sizing(env);
+	init_rotation(env);
+	set_controls(env);
+	create_grid(env, env->map);
+	mlx_loop(env->mlx);
 }
 
-char *pull_elements(char *str)
+t_mlx_vars	*init_env(void)
 {
-	int fd;
-	char *elements;
-	char *line;
+	t_mlx_vars	*env;
+
+	env = (t_mlx_vars *)malloc(sizeof(t_mlx_vars));
+	if (!env)
+		return (NULL);
+	env->mlx = mlx_init();
+	if (!env->mlx)
+	{
+		free(env);
+		return (NULL);
+	}
+	env->win = mlx_new_window(env->mlx, 1920, 1080, "Calvin's fdf");
+	env->img = mlx_new_image(env->mlx, 1920, 1080);
+	env->addr = mlx_get_data_addr(env->img, &env->bpp, &env->l_len, &env->end);
+	if (!env->win || !env->img || !env->addr)
+	{
+		free(env);
+		return (NULL);
+	}
+	return (env);
+}
+
+char	*pull_elements(char *str)
+{
+	int		fd;
+	char	*elements;
+	char	*line;
 
 	elements = NULL;
 	str = ft_strjoin(ft_strdup("./test_maps/"), str);
 	fd = open(str, O_RDONLY);
+	if (fd == -1)
+		return (NULL);
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -56,31 +97,29 @@ char *pull_elements(char *str)
 	return (elements);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	char *elements;
-	char **array;
-	t_mlx_vars vars;
+	char		*elements;
+	char		**array;
+	t_mlx_vars	*env;
 
 	if (ac == 2)
 	{
 		elements = pull_elements(av[1]);
 		array = ft_split(elements, '\n');
 		free(elements);
-		if (!array || check_map(array) == 0)
+		if (check_map(array) == 0 || !array)
 		{
 			ft_putstr_fd("Invalid map\n", 1);
-			free(array);
-			return (1);
+			free_and_return(array, 1);
+			exit(0);
 		}
-		vars.mlx = mlx_init();
-		if (!vars.mlx)
-		{
-			free_array(array);
-			return (1);
-		}
-		setup_img(vars, array);
-		mlx_loop(vars.mlx);
+		env = init_env();
+		if (!env)
+			free_and_return(array, 1);
+		setup_img(env, array);
 	}
+	else if (ac != 2)
+		ft_putstr_fd("Requires one and only one input as the map\n", 1);
 	return (0);
 }

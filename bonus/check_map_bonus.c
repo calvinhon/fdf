@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:17:42 by chon              #+#    #+#             */
-/*   Updated: 2024/04/05 18:09:29 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/08 15:03:51 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ int	check_map(char **array)
 	a.i = -1;
 	a.j = 0;
 	a.point_ct2 = 0;
+	if (!array)
+		return (0);
 	while (array[++a.i])
 	{
 		a.point_ct2 = ct_non_spaces(array[a.i]);

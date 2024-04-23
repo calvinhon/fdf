@@ -6,7 +6,7 @@
 /*   By: chon <chon@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:28:27 by chon              #+#    #+#             */
-/*   Updated: 2024/04/05 18:25:09 by chon             ###   ########.fr       */
+/*   Updated: 2024/04/08 14:58:06 by chon             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void		get_color(t_pt_dets **map);
 int			calc_color(double fraction, double color1, double color2);
 double		col_fract(t_pt_dets p1, t_pt_dets p2, double dx, double dy);
 void		free_array(char **array);
-int			free_and_return(char **str, int num);
+int			free_and_return(char **array, int num);
 int			err_msg_and_return(char *str, int num);
 
 #endif
